@@ -1,49 +1,41 @@
 # -*- coding: utf-8 -*-
 
-import argparse;
+import argparse
 
-currency_symbols = {
-    u'$':  u'USD',   # US Dollar
-    u'€':  u'EUR',   # Euro
-    u'₡':  u'CRC',   # Costa Rican Colón
-    u'£':  u'GBP',   # British Pound Sterling
-    u'₪':  u'ILS',   # Israeli New Sheqel
-    u'₹':  u'INR',   # Indian Rupee
-    u'¥':  u'JPY',   # Japanese Yen
-    u'₩':  u'KRW',   # South Korean Won
-    u'₦':  u'NGN',   # Nigerian Naira
-    u'₱':  u'PHP',   # Philippine Peso
-    u'zł': u'PLN',   # Polish Zloty
-    u'₲':  u'PYG',   # Paraguayan Guarani
-    u'฿':  u'THB',   # Thai Baht
-    u'₴':  u'UAH',   # Ukrainian Hryvnia
-    u'₫':  u'VND',   # Vietnamese Dong
-}
 
-def symbol_check(string):
-    if len(string) == 3:
-        return string.upper()
-    elif string in currency_symbols:
-        return currency_symbols[string]
-    raise argparse.ArgumentTypeError('"' + string + '" is not valid currency symbol')
+class ArgumentParser:
 
-args_parser = argparse.ArgumentParser(description='Currency converter.',
-                                 formatter_class=argparse.RawTextHelpFormatter)
+    @classmethod
+    def getParser(cls, cur_check):
 
-args_parser.add_argument('-a', '--amount',
-                    metavar='AMOUNT',
-                    type=float,
-                    required=True,
-                    help='Amount in given currency, that will be converted.')
+        args_parser = argparse.ArgumentParser(description='Currency converter.',
+                                              formatter_class=argparse.RawTextHelpFormatter)
 
-args_parser.add_argument('-i', '--input_currency',
-                    metavar='I_CURR',
-                    type=symbol_check,
-                    required=True,
-                    help='Input currency: 3-letter shortcut or currency symbol.')
+        args_parser.add_argument('-a', '--amount',
+                                 metavar='AMOUNT',
+                                 type=float,
+                                 required=True,
+                                 help='Amount in given currency, that will be converted.')
 
-args_parser.add_argument('-o', '--output_currency',
-                    metavar='O_CURR',
-                    type=symbol_check,
-                    required=False,
-                    help='Output currency: 3-letter shortcut or currency symbol.')
+        args_parser.add_argument('-i', '--input_currency',
+                                 metavar='I_CURR',
+                                 type=cur_check,
+                                 required=True,
+                                 help='Input currency: 3-letter shortcut or currency symbol.')
+
+        args_parser.add_argument('-o', '--output_currency',
+                                 metavar='O_CURR',
+                                 type=cur_check,
+                                 required=False,
+                                 help='Output currency: 3-letter shortcut or currency symbol.')
+        return args_parser
+
+
+if __name__ == "__main__":
+    def symbol_check(string):
+        if len(string) == 3:
+            return string.upper()
+        raise argparse.ArgumentTypeError('"' + string + '" is not valid currency symbol')
+
+    parser = ArgumentParser.getParser(symbol_check)
+    print(parser.parse_args(u"-i CZK -o USD -a 10".split()))
