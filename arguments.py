@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+from currency_list import CurrencyList
+from currency_rate import CurrencyRate
 
 
 class ArgumentParser:
@@ -8,8 +10,10 @@ class ArgumentParser:
     @classmethod
     def getParser(cls):
 
-        args_parser = argparse.ArgumentParser(description='Currency converter.',
-                                              formatter_class=argparse.RawTextHelpFormatter)
+        args_parser = argparse.ArgumentParser(prog="curr_converter",
+                                              description='Currency converter - uses "' +
+                                              CurrencyList.getUrl() +'" for currencies information and "' +
+                                              CurrencyRate.getUrl() + '" for currency rates.')
 
         args_parser.add_argument('-a', '--amount',
                                  metavar='AMOUNT',
@@ -27,10 +31,10 @@ class ArgumentParser:
                                  metavar='O_CURR',
                                  type=str,
                                  required=False,
-                                 help='Output currency: 3-letter shortcut or currency symbol.')
+                                 help='Output currency: 3-letter shortcut or currency symbol. If not listed, all currencies will be listed. (Unfortunately listing all currencies can take a bit longer, because we need to send each rate request individually).')
         return args_parser
 
 
 if __name__ == "__main__":
     parser = ArgumentParser.getParser()
-    print(parser.parse_args(u"-i CZK -o USD -a 10".split()))
+    print(parser.parse_args("-i CZK -o USD -a 10".split()))

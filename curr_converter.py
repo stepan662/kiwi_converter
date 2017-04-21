@@ -8,11 +8,15 @@ from currency_list import CurrencyList
 from currency_rate import CurrencyRate
 
 def get_currency_symbol(symbol, curList):
-    symbol = unicode(symbol, "utf-8")
     if curList.isCurrencyCode(symbol):
         return symbol
     else:
         return curList.getCodeBySymbol(symbol)
+
+def exit_with_err(code, msg):
+    sys.stdout.write(msg)
+    sys.stdout.write('\n')
+    sys.exit(code)
 
 def main(argv):
     argParser = ArgumentParser.getParser()
@@ -23,13 +27,13 @@ def main(argv):
     try:
         currencyList = CurrencyList()
     except Exception as e:
-        sys.exit("CurrencyList Error: " + str(e))
+        exit_with_err(1, "CurrencyList Error: " + e)
 
     # get currency code either from curency symbol
     try:
         inCurrency = get_currency_symbol(args.input_currency, currencyList)
     except ValueError as e:
-        sys.exit("Input currency error: " + str(e))
+        exit_with_err(1, "Input currency error: " + e)
 
     moneyAmount = args.amount
 
@@ -49,12 +53,12 @@ def main(argv):
         try:
             outCurrency = get_currency_symbol(args.output_currency, currencyList)
         except ValueError as e:
-            sys.exit("Output currency error: " + str(e))
+            exit_with_err(1, "Output currency error: " + e)
 
         try:
             outputDict[outCurrency] = CurrencyRate.convert(inCurrency, outCurrency, moneyAmount)
         except Exception as e:
-            sys.exit("Currency converter error: " + str(e))
+            exit_with_err(1, "Currency converter error: " + e)
 
 
 
@@ -64,7 +68,7 @@ def main(argv):
         try:
             outputDict = CurrencyRate.convertFromList(inCurrency, all_currencies, moneyAmount)
         except Exception as e:
-            sys.exit("Currency converter error: " + str(e))
+            exit_with_err(1, "Currency converter error: " + e)
 
 
 

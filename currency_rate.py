@@ -8,6 +8,10 @@ class CurrencyRate:
 
     _converter_url = 'http://rate-exchange-1.appspot.com/currency'
 
+    @classmethod
+    def getUrl(cls):
+        return cls._converter_url
+
 
     @classmethod
     def _composeUrl(cls, src, target, amount):
@@ -20,7 +24,7 @@ class CurrencyRate:
         if (resp.status_code != 200):
             resp.raise_for_status()
 
-        return "{0:.2f}".format(resp.json()[u"v"])
+        return "{0:.2f}".format(resp.json()["v"])
 
     @classmethod
     def convertFromList(cls, src, targets, amount):
@@ -31,7 +35,7 @@ class CurrencyRate:
             if resp.status_code != 200:
                 resp.raise_for_status()
             json = resp.json()
-            result[json[u"to"]] = "{0:.2f}".format(json[u"v"])
+            result[json["to"]] = "{0:.2f}".format(json["v"])
         return result
 
 
