@@ -21,8 +21,12 @@ class CurrencyList:
 
     def getCodeBySymbol(self, symbol):
         for code in self._list:
-            if(self._list[code][u"symbol"] == symbol):
+            if(self._list[code]["symbol"] == symbol):
                 return code
+        raise ValueError(symbol + " is not currency symbol")
+
+    def isCurrencyCode(self, code):
+        return code in self._list
 
 
 
@@ -31,4 +35,4 @@ if __name__ == "__main__":
     # check masic functionality
     list = CurrencyList()
     print(list.getAllCurrencyCodes())
-    print(list.getCodeBySymbol(u"Kč"))
+    print(list.getCodeBySymbol("Kč"))
