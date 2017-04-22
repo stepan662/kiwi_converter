@@ -43,13 +43,13 @@ def main(argv):
     try:
         currencyList = CurrencyList()
     except Exception as e:
-        exit_with_err(1, "CurrencyList Error: " + e)
+        exit_with_err(1, "CurrencyList Error: " + str(e))
 
     # get currency code either from curency symbol
     try:
         inCurrency = get_curr_symbol(args.input_currency, currencyList)
     except ValueError as e:
-        exit_with_err(1, "Input currency error: " + e)
+        exit_with_err(1, "Input currency error: " + str(e))
 
     moneyAmount = args.amount
 
@@ -69,13 +69,13 @@ def main(argv):
         try:
             outCurrency = get_curr_symbol(args.output_currency, currencyList)
         except ValueError as e:
-            exit_with_err(1, "Output currency error: " + e)
+            exit_with_err(1, "Output currency error: " + str(e))
 
         try:
             outputDict[outCurrency] =\
                 CurrencyRate.convert(inCurrency, outCurrency, moneyAmount)
         except Exception as e:
-            exit_with_err(1, "Currency converter error: " + e)
+            exit_with_err(1, "Currency converter error: " + str(e))
 
     else:
         # no output currency - get all rates
@@ -87,7 +87,7 @@ def main(argv):
             )
 
         except Exception as e:
-            exit_with_err(1, "Currency converter error: " + e)
+            exit_with_err(1, "Currency converter error: " + str(e))
 
     # organize into json format
     output = json.dumps({
