@@ -47,3 +47,5 @@ python3 ./curr_converter.py -i £ -a 1 -o CZK
 ## Notes
 
 Application uses http://rate-exchange-1.appspot.com/ API for currency conversion by actual rate and https://gist.github.com/Fluidbyte/2973986 for currencies symbols and codes info.
+
+In order to find api supporting for as many foreign currencies as possible, selected API doesn't support listing all rates by single request - that's why listing all currencies rates requires sending request for each one and this command can be a bit slower.
