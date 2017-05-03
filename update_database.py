@@ -16,7 +16,7 @@ def fillDatabase():
 
     lastRecord = Database.getLastRow()
     if len(lastRecord) == 1:
-        date = lastRecord[0].date
+        date = lastRecord[0].date + timedelta(1)
 
     today = datetime.now().replace(minute=0, hour=0, second=0, microsecond=0)
     while date <= today:
