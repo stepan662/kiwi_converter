@@ -3,6 +3,7 @@
 import requests
 import grequests
 import currency_list
+from datetime import datetime
 
 """
 Static class wrapping online currency converter api.
@@ -11,7 +12,7 @@ Static class wrapping online currency converter api.
 
 class CurrencyRate:
 
-    _converter_url = 'http://rate-exchange-1.appspot.com/currency'
+    _converter_url = 'http://api.fixer.io/'
 
     @classmethod
     def getUrl(cls):
@@ -21,43 +22,25 @@ class CurrencyRate:
         return cls._converter_url
 
     @classmethod
-    def _composeUrl(cls, src, target, amount):
+    def _composeUrl(cls, src, date="latest"):
         """
         Private class method, compose url from given parameters.
         """
         return cls._converter_url +\
-            "?from=" + src + "&to=" + target + "&q=" + str(amount)
+            date + "?base=" + src
 
     @classmethod
-    def convert(cls, src, target, amount):
-        """
-        Class method, converts given amount of money from src currency to
-        target currency. If currency codes are not valid or
-        there is network error, raise exception.
-        Returns currency code with converted amount in dictionary structure.
-        """
-        resp = requests.get(cls._composeUrl(src, target, amount))
+    def getRatesInDate(cls, date):
+        resp = requests.get(cls._composeUrl("EUR", date))
         if (resp.status_code != 200):
             resp.raise_for_status()
+        return resp.json()["rates"]
 
-        return "{0:.2f}".format(resp.json()["v"])
 
-    @classmethod
-    def convertFromList(cls, src, targets, amount):
-        """
-        Class method, converts given amount of money from src currency all
-        given currencies. Sends request for each currency asynchronously.
-        If codes are invalid or there is network error, raise exception.
-        Returns currency codes with converted amounts in dictionary structure.
-        """
-        rqsts = (grequests.get(
-            cls._composeUrl(src, target, amount)) for target in targets)
-
-        responses = grequests.map(rqsts)
-        result = {}
-        for resp in responses:
-            if resp.status_code != 200:
-                resp.raise_for_status()
-            json = resp.json()
-            result[json["to"]] = "{0:.2f}".format(json["v"])
-        return result
+if __name__ == "__main__":
+    dates = []
+    for year in range(2000, 2017):
+        date = datetime.strptime(str(year), "%Y")
+        dates.append(date.strftime("%Y-%m-%d"))
+    for k in CurrencyRate.getRatesInDates(dates):
+        print(k)
