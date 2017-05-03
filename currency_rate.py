@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import grequests
-import currency_list
 from datetime import datetime
 
 """
@@ -38,9 +36,6 @@ class CurrencyRate:
 
 
 if __name__ == "__main__":
-    dates = []
-    for year in range(2000, 2017):
-        date = datetime.strptime(str(year), "%Y")
-        dates.append(date.strftime("%Y-%m-%d"))
-    for k in CurrencyRate.getRatesInDates(dates):
+    date = datetime(2001, 1, 1)
+    for k in CurrencyRate.getRatesInDate(date.strftime("%Y-%m-%d")):
         print(k)

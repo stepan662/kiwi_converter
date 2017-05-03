@@ -60,4 +60,4 @@ if __name__ == "__main__":
     Database.insert(
         [Rate(datetime.strptime('16Sep2012', '%d%b%Y'), "CZK", 0.1)])
     print(Database.getRates(
-        datetime(2000, 1, 1), datetime(2001, 1, 1), "CZK", 3))
+        datetime(2000, 1, 1), datetime(2001, 1, 1), "CZK"))
