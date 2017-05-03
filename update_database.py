@@ -1,9 +1,9 @@
-from currency_list import CurrencyList
 from currency_rate import CurrencyRate
 from database import Database
 from database import Rate
 from datetime import datetime, timedelta
 import time
+import sys
 
 
 def fillDatabase():
@@ -13,12 +13,15 @@ def fillDatabase():
 
     dates = []
     date = datetime(2000, 1, 1, 1)
-    endDate = datetime.now()
-    while date <= endDate:
+
+    lastRecord = Database.getLastRow()
+    if len(lastRecord) == 1:
+        date = lastRecord[0].date
+
+    today = datetime.now().replace(minute=0, hour=0, second=0, microsecond=0)
+    while date <= today:
         dates.append(date)
         date += timedelta(1)
-
-    Database.init()
 
     for date in dates:
         rateList = []
@@ -31,7 +34,10 @@ def fillDatabase():
                 currency,
                 rates[currency]
                 ))
-        print(dates.index(date), len(dates))
+
+        sys.stdout.write("\rDownloading last rates: " +
+                         str(dates.index(date)) +
+                         "/" + str(len(dates)))
         Database.insert(rateList)
 
 

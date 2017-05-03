@@ -2,3 +2,4 @@
 __pycache__/
 kiwi_converter/
 *.py[cod]
+rates.db

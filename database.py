@@ -55,6 +55,12 @@ class Database:
                 Rate.date <= date_to
                 ).order_by(Rate.date).all()
 
+    @classmethod
+    def getLastRow(cls):
+        return cls.session.query(Rate)\
+            .order_by(desc(Rate.date))\
+            .limit(1).all()
+
 
 if __name__ == "__main__":
     Database.insert(
